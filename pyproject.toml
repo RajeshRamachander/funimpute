@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "funputer"
 version = "1.0.3"
 description = "Simple, intelligent imputation analysis for data science"
-readme = "README_SIMPLE.md"
+readme = "README.md"
 authors = [
     {name = "Rajesh Ramachander", email = "rajeshr.technocraft@gmail.com"}
 ]
