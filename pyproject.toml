@@ -46,10 +46,10 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/your-username/funimpute"
-Documentation = "https://github.com/your-username/funimpute#readme"
-Repository = "https://github.com/your-username/funimpute"
-Issues = "https://github.com/your-username/funimpute/issues"
+Homepage = "https://github.com/RajeshRamachander/funimpute"
+Documentation = "https://github.com/RajeshRamachander/funimpute#readme"
+Repository = "https://github.com/RajeshRamachander/funimpute"
+Issues = "https://github.com/RajeshRamachander/funimpute/issues"
 
 [project.scripts]
 funimpute = "funimpute.simple_cli:main"
