@@ -2,7 +2,7 @@
 Simple, intelligent imputation analysis for data science.
 """
 
-__version__ = "1.0.0"
+__version__ = "1.0.3"
 __author__ = "Rajesh Ramachander"
 
 # Simple API for client applications

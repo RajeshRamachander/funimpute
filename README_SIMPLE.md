@@ -1,9 +1,9 @@
-# FunImpute - Intelligent Imputation Analysis
+# FunPuter - Intelligent Imputation Analysis
 
 **Simple, fast, intelligent recommendations for handling missing data.**
 
 [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/)
-[![PyPI](https://img.shields.io/pypi/v/funimpute.svg)](https://pypi.org/project/funimpute/)
+[![PyPI](https://img.shields.io/pypi/v/funputer.svg)](https://pypi.org/project/funputer/)
 
 FunImpute analyzes your data and suggests the best imputation methods based on:
 - **Missing data mechanisms** (MCAR, MAR, MNAR detection)
@@ -15,7 +15,7 @@ FunImpute analyzes your data and suggests the best imputation methods based on:
 
 ### Installation
 ```bash
-pip install funimpute
+pip install funputer
 ```
 
 ### Basic Usage
@@ -25,7 +25,7 @@ pip install funimpute
 import funimpute
 
 # Analyze your dataset
-suggestions = funimpute.analyze_imputation_requirements(
+suggestions = funputer.analyze_imputation_requirements(
     metadata_path="metadata.csv",
     data_path="data.csv"
 )
@@ -75,7 +75,7 @@ category,categorical,,,FALSE,,,User category A/B/C
 ```python
 import pandas as pd
 import funimpute
-from funimpute import ColumnMetadata
+from funputer import ColumnMetadata
 
 # Your data
 data = pd.DataFrame({
@@ -92,7 +92,7 @@ metadata = [
 ]
 
 # Get suggestions
-suggestions = funimpute.analyze_dataframe(data, metadata)
+suggestions = funputer.analyze_dataframe(data, metadata)
 
 # Apply suggestions (Phase 2 - your implementation)
 for s in suggestions:
@@ -105,7 +105,7 @@ for s in suggestions:
 
 ### Configuration
 ```python
-from funimpute import AnalysisConfig
+from funputer import AnalysisConfig
 
 # Custom analysis settings
 config = AnalysisConfig(
@@ -114,7 +114,7 @@ config = AnalysisConfig(
     skewness_threshold=1.5        # Mean vs median decision point
 )
 
-suggestions = funimpute.analyze_imputation_requirements(
+suggestions = funputer.analyze_imputation_requirements(
     "metadata.csv", "data.csv", config=config
 )
 ```
@@ -166,7 +166,7 @@ def process_customer_data(df):
     ]
     
     # 2. Get intelligent suggestions
-    suggestions = funimpute.analyze_dataframe(df, metadata)
+    suggestions = funputer.analyze_dataframe(df, metadata)
     
     # 3. Apply high-confidence suggestions automatically
     for s in suggestions:
@@ -183,7 +183,7 @@ def process_customer_data(df):
 
 ## Distribution
 
-- **PyPI Package**: `pip install funimpute`
+- **PyPI Package**: `pip install funputer`
 - **Source Code**: Available on GitHub
 - **Requirements**: Python 3.9+, pandas, numpy, scipy
 
