@@ -244,7 +244,7 @@ def analyze_dataframe(
         
     Example:
         >>> import pandas as pd
-        >>> from funimpute.models import ColumnMetadata
+        >>> from funimputer.models import ColumnMetadata
         >>> 
         >>> data = pd.DataFrame({'age': [25, None, 30], 'name': ['A', 'B', None]})
         >>> metadata = [

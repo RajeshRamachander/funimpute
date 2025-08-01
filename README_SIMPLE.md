@@ -40,10 +40,10 @@ for suggestion in suggestions:
 **Command Line**
 ```bash
 # Analyze and save results
-funimpute -m metadata.csv -d data.csv -o suggestions.csv
+funimputer -m metadata.csv -d data.csv -o suggestions.csv
 
 # View results
-funimpute -m metadata.csv -d data.csv --verbose
+funimputer -m metadata.csv -d data.csv --verbose
 ```
 
 ## Metadata Format

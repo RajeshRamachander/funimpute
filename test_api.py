@@ -5,8 +5,8 @@ import pandas as pd
 import sys
 import os
 
-# Add funimpute to path
-sys.path.insert(0, '/Users/rajeshramachander/Documents/GitHub/funimpute')
+# Add funimputer to path
+sys.path.insert(0, '/')
 
 import funimpute
 from funimpute.models import ColumnMetadata

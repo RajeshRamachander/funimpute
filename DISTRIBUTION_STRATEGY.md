@@ -26,7 +26,7 @@
 
 **PyPI Package** (funimpute)
 ```bash
-pip install funimpute
+pip install funimputer
 ```
 
 **Features Included:**
@@ -65,12 +65,12 @@ pip install funimpute
 
 **Docker Images**
 ```bash
-docker run funimpute/analyzer:latest
+docker run funimputer/analyzer:latest
 ```
 
 **Kubernetes Helm Charts**
 ```bash
-helm install funimpute funimpute/charts
+helm install funimputer funimputer/charts
 ```
 
 ## Technical Distribution Requirements

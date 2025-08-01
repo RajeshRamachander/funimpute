@@ -33,13 +33,13 @@ def main(metadata, data, output, config, verbose):
     Examples:
     
     # Basic usage
-    funimpute -m metadata.csv -d data.csv
+    funimputer -m metadata.csv -d data.csv
     
     # With custom output
-    funimpute -m metadata.csv -d data.csv -o my_suggestions.csv
+    funimputer -m metadata.csv -d data.csv -o my_suggestions.csv
     
     # With configuration
-    funimpute -m metadata.csv -d data.csv -c config.yml
+    funimputer -m metadata.csv -d data.csv -c config.yml
     """
     
     # Setup logging

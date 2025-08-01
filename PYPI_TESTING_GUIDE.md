@@ -42,13 +42,13 @@ python -m venv test_env
 source test_env/bin/activate  # On Windows: test_env\Scripts\activate
 
 # Install from TestPyPI
-pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ funimpute
+pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ funimputer
 
 # Test it works
 python -c "import funimpute; print('✅ Import successful')"
 
 # Test the CLI
-funimpute --help
+funimputer --help
 
 # Test the simple API
 python -c "
@@ -121,11 +121,11 @@ python -m venv prod_test_env
 source prod_test_env/bin/activate
 
 # Install from PyPI
-pip install funimpute
+pip install funimputer
 
 # Test it works
 python -c "import funimpute; print('✅ Production install successful')"
-funimpute --help
+funimputer --help
 ```
 
 ## Expected Results
@@ -144,11 +144,11 @@ https://test.pypi.org/project/funimpute/
 
 ### Successful Installation:
 ```bash
-$ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ funimpute
-Successfully installed funimpute-1.0.0 pandas-2.0.3 numpy-1.24.3 scipy-1.11.1 pyyaml-6.0 click-8.1.3 pydantic-2.4.2
+$ pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ funimputer
+Successfully installed funimputer-1.0.0 pandas-2.0.3 numpy-1.24.3 scipy-1.11.1 pyyaml-6.0 click-8.1.3 pydantic-2.4.2
 
-$ funimpute --help
-Usage: funimpute [OPTIONS]
+$ funimputer --help
+Usage: funimputer [OPTIONS]
 Analyze dataset and suggest imputation methods.
 ...
 ```

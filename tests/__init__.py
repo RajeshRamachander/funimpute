@@ -1,3 +1,3 @@
 """
-Unit tests for the funimpute package.
+Unit tests for the funimputer package.
 """
