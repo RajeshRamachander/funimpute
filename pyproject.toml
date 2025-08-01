@@ -35,7 +35,6 @@ dependencies = [
     "pydantic>=2.0.0",
     "requests>=2.20.0",
     "jsonschema>=4.0.0",
-    "prometheus_client>=0.8.0",
 ]
 
 [project.optional-dependencies]
@@ -46,6 +45,9 @@ dev = [
     "isort>=5.10.0",
     "mypy>=1.0.0",
     "flake8>=5.0.0",
+]
+monitoring = [
+    "prometheus_client>=0.8.0",
 ]
 
 [project.urls]

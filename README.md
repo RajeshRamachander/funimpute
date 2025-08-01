@@ -49,6 +49,8 @@ funputer -m metadata.csv -d data.csv --verbose
 
 ## 📋 Metadata Format
 
+### CSV Format (Simple)
+
 Create a CSV with your column information:
 
 ```csv
@@ -59,15 +61,73 @@ income,float,0,,FALSE,age,Higher with age,Annual income
 category,categorical,,,FALSE,,,User category A/B/C
 ```
 
-**Required columns:**
-- `column_name`: Name of your data column
+### JSON Format (Enterprise)
+
+For more complex metadata with business rules and governance:
+
+```json
+{
+  "columns": [
+    {
+      "name": "user_id",
+      "data_type": "integer",
+      "unique": true,
+      "constraints": {
+        "min_value": 1,
+        "max_value": 999999
+      },
+      "description": "User identifier"
+    },
+    {
+      "name": "age",
+      "data_type": "integer",
+      "constraints": {
+        "min_value": 0,
+        "max_value": 120
+      },
+      "business_rules": [
+        {
+          "description": "Must be positive",
+          "expression": "age > 0"
+        }
+      ]
+    },
+    {
+      "name": "income",
+      "data_type": "float",
+      "constraints": {
+        "min_value": 0
+      },
+      "relationships": {
+        "dependent_columns": ["age"]
+      },
+      "business_rules": [
+        {
+          "description": "Higher with age",
+          "expression": "income correlation with age"
+        }
+      ]
+    },
+    {
+      "name": "category",
+      "data_type": "categorical",
+      "constraints": {
+        "allowed_values": ["A", "B", "C"]
+      }
+    }
+  ]
+}
+```
+
+**Required fields:**
+- `name`: Column name in your data
 - `data_type`: One of `integer`, `float`, `string`, `categorical`, `datetime`, `boolean`
 
-**Optional columns:**
-- `min_value`, `max_value`: Valid ranges for numeric data
-- `unique_flag`: Set to `TRUE` for ID columns
-- `dependent_column`: Related column for dependency analysis
-- `business_rule`: Business constraints or relationships
+**Optional fields:**
+- `constraints`: Value ranges, allowed values, patterns
+- `unique`: Set to `true` for ID columns
+- `relationships`: Dependencies between columns
+- `business_rules`: Domain-specific validation rules
 - `description`: Human-readable description
 
 ## 🏗️ Client Application Integration
@@ -104,21 +164,63 @@ for s in suggestions:
     # ... implement other methods as needed
 ```
 
-### Configuration
+## ⚙️ Configuration Options
+
+### Python API Configuration
 ```python
 from funimpute import AnalysisConfig
 
 # Custom analysis settings
 config = AnalysisConfig(
-    iqr_multiplier=2.0,           # Outlier detection sensitivity
-    correlation_threshold=0.4,    # Relationship detection threshold
-    skewness_threshold=1.5        # Mean vs median decision point
+    iqr_multiplier=2.0,                    # Outlier detection sensitivity (default: 1.5)
+    correlation_threshold=0.4,             # Relationship detection threshold (default: 0.3)
+    skewness_threshold=1.5,                # Mean vs median decision point (default: 2.0)
+    missing_percentage_threshold=0.8,      # Max missing % before flagging (default: 0.5)
+    outlier_percentage_threshold=0.1       # Max outlier % before flagging (default: 0.05)
 )
 
 suggestions = funimpute.analyze_imputation_requirements(
     "metadata.csv", "data.csv", config=config
 )
 ```
+
+### YAML Configuration File
+Create a `config.yml` file:
+
+```yaml
+# Analysis thresholds
+iqr_multiplier: 2.0
+correlation_threshold: 0.4
+skewness_threshold: 1.5
+missing_percentage_threshold: 0.8
+outlier_percentage_threshold: 0.1
+
+# Chi-square test parameters
+chi_square_alpha: 0.05
+point_biserial_threshold: 0.2
+
+# Output settings
+output_path: "custom_suggestions.csv"
+```
+
+Use with CLI:
+```bash
+funputer -m metadata.csv -d data.csv -c config.yml
+```
+
+### Configuration Parameters Explained
+
+**Outlier Detection:**
+- `iqr_multiplier`: Higher = less sensitive to outliers (1.5 = strict, 3.0 = lenient)
+- `outlier_percentage_threshold`: Flag columns with more than X% outliers
+
+**Missing Data Analysis:**  
+- `correlation_threshold`: Minimum correlation to detect relationships
+- `missing_percentage_threshold`: Flag columns with more than X% missing
+- `chi_square_alpha`: P-value threshold for statistical tests
+
+**Imputation Method Selection:**
+- `skewness_threshold`: When to prefer median over mean (higher = more mean)
 
 ## 📊 What You Get
 
@@ -182,11 +284,37 @@ def process_customer_data(df):
     return df
 ```
 
-## 📦 Distribution
+## 📦 Installation & Optional Features
 
-- **PyPI Package**: `pip install funputer`
-- **Source Code**: Available on GitHub
-- **Requirements**: Python 3.9+, pandas, numpy, scipy
+### Basic Installation
+```bash
+pip install funputer
+```
+
+### With Optional Monitoring (Prometheus)
+```bash
+pip install funputer[monitoring]
+```
+
+Then enable monitoring in your code:
+```python
+from funimpute.metrics import start_metrics_server
+
+# Start Prometheus metrics server on port 8001
+start_metrics_server(8001)
+
+# Your analysis code here...
+# Metrics will be available at http://localhost:8001/metrics
+```
+
+### Development Installation
+```bash
+git clone https://github.com/RajeshRamachander/funputer
+cd funputer
+pip install -r requirements.txt
+```
+
+**Requirements**: Python 3.9+, pandas, numpy, scipy
 
 ## 📄 License
 

@@ -7,9 +7,18 @@ import logging
 import sys
 from pathlib import Path
 
-from .simple_analyzer import analyze_imputation_requirements
-from .models import AnalysisConfig
-from .io import save_suggestions
+# Handle both direct execution and module import
+try:
+    from .simple_analyzer import analyze_imputation_requirements
+    from .models import AnalysisConfig
+    from .io import save_suggestions
+except ImportError:
+    # Direct execution - add parent directory to path
+    import os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from funimpute.simple_analyzer import analyze_imputation_requirements
+    from funimpute.models import AnalysisConfig
+    from funimpute.io import save_suggestions
 
 
 @click.command()

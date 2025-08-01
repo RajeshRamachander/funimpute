@@ -1,0 +1,49 @@
+{
+  "columns": [
+    {
+      "name": "user_id",
+      "data_type": "integer",
+      "unique": true,
+      "description": "User identifier"
+    },
+    {
+      "name": "age",
+      "data_type": "integer",
+      "constraints": {
+        "min_value": 0,
+        "max_value": 120
+      },
+      "description": "User age"
+    },
+    {
+      "name": "income",
+      "data_type": "float",
+      "constraints": {
+        "min_value": 0
+      },
+      "relationships": {
+        "dependent_columns": [
+          "age"
+        ]
+      },
+      "description": "Income amount"
+    },
+    {
+      "name": "category",
+      "data_type": "categorical",
+      "constraints": {
+        "allowed_values": [
+          "A",
+          "B",
+          "C"
+        ]
+      },
+      "description": "User category"
+    },
+    {
+      "name": "status",
+      "data_type": "categorical",
+      "description": "Account status"
+    }
+  ]
+}
