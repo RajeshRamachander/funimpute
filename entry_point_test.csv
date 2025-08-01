@@ -1,0 +1,6 @@
+Column,Missing_Count,Missing_Percentage,Missingness_Mechanism,Proposed_Method,Rationale,Outlier_Count,Outlier_Percentage,Outlier_Handling,Outlier_Rationale,Confidence_Score
+user_id,0,0.0%,MCAR,No action needed,No missing values detected - no imputation required,0,0.0%,Leave as is,No outliers detected,1.000
+age,2,0.2%,MCAR,Mean,Numeric data with MCAR mechanism and low skewness (0.36) - use mean,0,0.0%,Leave as is,No outliers detected,0.600
+income,2,0.2%,MCAR,Mean,Numeric data with MCAR mechanism and low skewness (0.99) - use mean,0,0.0%,Leave as is,No outliers detected,0.600
+category,1,0.1%,MCAR,Mode,Categorical data with MCAR mechanism - use most frequent category,0,0.0%,Leave as is,Non-numeric data type (categorical) - no outlier detection,0.650
+status,2,0.2%,MCAR,Mode,Categorical data with MCAR mechanism - use most frequent category,0,0.0%,Leave as is,Non-numeric data type (string) - no outlier detection,0.550

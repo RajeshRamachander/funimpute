@@ -1,0 +1,11 @@
+user_id,age,income,category,status
+1,25,50000,A,active
+2,,60000,B,active
+3,35,,A,inactive
+4,42,80000,,active
+5,,45000,C,
+6,28,55000,B,active
+7,45,90000,A,active
+8,33,,B,inactive
+9,50,120000,C,active
+10,29,48000,A,

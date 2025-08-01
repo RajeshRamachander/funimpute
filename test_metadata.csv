@@ -1,0 +1,6 @@
+column_name,data_type,min_value,max_value,unique_flag,nullable,business_rule,dependency_rule
+user_id,integer,1,99999,true,false,,
+age,integer,0,120,false,true,Must be realistic age,
+income,float,0,500000,false,true,Correlates with age,age
+category,categorical,,,false,true,,
+status,string,,,false,true,,

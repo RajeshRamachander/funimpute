@@ -1,0 +1,257 @@
+{
+  "schema_info": {
+    "schema_version": "1.0.0",
+    "metadata_version": "1.2.1",
+    "created_at": "2024-01-15T10:30:00Z",
+    "updated_at": "2024-08-01T05:38:00Z",
+    "owner": "data-engineering@company.com",
+    "steward": "jane.smith@company.com",
+    "last_reviewed": "2024-07-15",
+    "reviewer_comments": "Updated business rules for Unit_Price validation",
+    "dataset_name": "material_master_data",
+    "dataset_description": "Master data for materials including pricing, stock levels, and supplier information"
+  },
+  "lineage": {
+    "source_system": "SAP_ERP",
+    "source_table": "MARA",
+    "extraction_method": "incremental",
+    "transformation_notes": "Applied currency conversion and unit standardization",
+    "data_classification": "internal"
+  },
+  "quality_thresholds": {
+    "max_missing_percentage": 0.15,
+    "max_outlier_percentage": 0.08,
+    "min_data_freshness_hours": 6
+  },
+  "columns": [
+    {
+      "name": "Material_ID",
+      "display_name": "Material ID",
+      "description": "Unique identifier for materials in the ERP system",
+      "data_type": "integer",
+      "required": true,
+      "unique": true,
+      "constraints": {
+        "min_value": 1,
+        "max_value": 999999,
+        "pattern": "^[1-9]\\d{0,5}$"
+      },
+      "imputation_config": {
+        "missing_strategy_hint": "MNAR",
+        "default_imputer": "manual",
+        "quality_thresholds": {
+          "max_missing_pct": 0.0,
+          "max_outlier_pct": 0.0
+        }
+      },
+      "relationships": {
+        "influences_columns": ["Material_Name", "Category", "Unit_Price"],
+        "foreign_keys": [
+          {
+            "table": "material_categories",
+            "column": "material_id"
+          }
+        ]
+      },
+      "business_rules": [
+        {
+          "rule_id": "MAT_ID_001",
+          "expression": "Material_ID > 0",
+          "description": "Material ID must be positive",
+          "severity": "error",
+          "active": true
+        },
+        {
+          "rule_id": "MAT_ID_002",
+          "expression": "Material_ID IS NOT NULL",
+          "description": "Material ID is mandatory",
+          "severity": "error",
+          "active": true
+        }
+      ],
+      "lineage": {
+        "source_column": "MATNR",
+        "transformations": [
+          {
+            "type": "type_conversion",
+            "description": "Converted from string to integer",
+            "applied_at": "2024-01-15T10:30:00Z"
+          }
+        ]
+      },
+      "governance": {
+        "pii": false,
+        "sensitive": false,
+        "retention_policy": "indefinite",
+        "compliance_tags": ["SOX"]
+      },
+      "statistics": {
+        "last_profiled": "2024-08-01T00:00:00Z",
+        "distinct_count": 1000,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "min": 1,
+        "max": 999999
+      },
+      "version": "1.0.0",
+      "tags": ["identifier", "core", "required"]
+    },
+    {
+      "name": "Unit_Price",
+      "display_name": "Unit Price",
+      "description": "Price per unit in USD",
+      "data_type": "float",
+      "required": false,
+      "unique": false,
+      "constraints": {
+        "min_value": 0.01,
+        "max_value": 10000.0
+      },
+      "imputation_config": {
+        "missing_strategy_hint": "MAR",
+        "default_imputer": "regression",
+        "imputer_parameters": {
+          "regression_features": ["Category", "Supplier_Rating", "Quality_Score"]
+        },
+        "quality_thresholds": {
+          "max_missing_pct": 0.1,
+          "max_outlier_pct": 0.05
+        }
+      },
+      "relationships": {
+        "dependent_columns": ["Category", "Supplier_Rating"],
+        "influences_columns": ["Storage_Cost", "Reorder_Point"]
+      },
+      "business_rules": [
+        {
+          "rule_id": "PRICE_001",
+          "expression": "Unit_Price > 0",
+          "description": "Unit price must be positive",
+          "severity": "error",
+          "active": true
+        },
+        {
+          "rule_id": "PRICE_002",
+          "expression": "CASE WHEN Category = 'A' THEN Unit_Price > 50 WHEN Category = 'B' THEN Unit_Price BETWEEN 10 AND 50 WHEN Category = 'C' THEN Unit_Price < 10 END",
+          "description": "Price must align with category ranges",
+          "severity": "warning",
+          "active": true
+        },
+        {
+          "rule_id": "PRICE_003",
+          "expression": "Unit_Price <= max_value",
+          "description": "Price cannot exceed maximum threshold",
+          "severity": "error",
+          "active": true
+        }
+      ],
+      "lineage": {
+        "source_column": "PRICE",
+        "transformations": [
+          {
+            "type": "currency_conversion",
+            "description": "Converted from EUR to USD using daily exchange rate",
+            "applied_at": "2024-01-15T10:30:00Z"
+          },
+          {
+            "type": "outlier_capping",
+            "description": "Capped extreme values at 99.9th percentile",
+            "applied_at": "2024-02-01T08:00:00Z"
+          }
+        ]
+      },
+      "governance": {
+        "pii": false,
+        "sensitive": true,
+        "retention_policy": "7_years",
+        "compliance_tags": ["SOX", "financial_reporting"]
+      },
+      "statistics": {
+        "last_profiled": "2024-08-01T00:00:00Z",
+        "distinct_count": 856,
+        "null_count": 49,
+        "null_percentage": 0.049,
+        "mean": 45.67,
+        "median": 32.50,
+        "std_dev": 28.94,
+        "min": 0.01,
+        "max": 999.99,
+        "top_values": [
+          {"value": 25.00, "count": 15, "percentage": 0.015},
+          {"value": 50.00, "count": 12, "percentage": 0.012},
+          {"value": 100.00, "count": 10, "percentage": 0.010}
+        ]
+      },
+      "version": "1.2.0",
+      "tags": ["financial", "pricing", "sensitive"]
+    },
+    {
+      "name": "Category",
+      "display_name": "Material Category",
+      "description": "Material classification (A=High value, B=Medium value, C=Low value)",
+      "data_type": "categorical",
+      "required": true,
+      "unique": false,
+      "constraints": {
+        "allowed_values": ["A", "B", "C"],
+        "max_length": 1
+      },
+      "imputation_config": {
+        "missing_strategy_hint": "MCAR",
+        "default_imputer": "mode",
+        "quality_thresholds": {
+          "max_missing_pct": 0.02,
+          "max_outlier_pct": 0.0
+        }
+      },
+      "relationships": {
+        "influences_columns": ["Unit_Price", "Lead_Time_Days", "Warehouse_Location"]
+      },
+      "business_rules": [
+        {
+          "rule_id": "CAT_001",
+          "expression": "Category IN ('A', 'B', 'C')",
+          "description": "Category must be A, B, or C",
+          "severity": "error",
+          "active": true
+        },
+        {
+          "rule_id": "CAT_002",
+          "expression": "Category IS NOT NULL",
+          "description": "Category is mandatory for all materials",
+          "severity": "error",
+          "active": true
+        }
+      ],
+      "lineage": {
+        "source_column": "MTART",
+        "transformations": [
+          {
+            "type": "mapping",
+            "description": "Mapped from SAP material type codes to ABC classification",
+            "applied_at": "2024-01-15T10:30:00Z"
+          }
+        ]
+      },
+      "governance": {
+        "pii": false,
+        "sensitive": false,
+        "retention_policy": "indefinite",
+        "compliance_tags": ["business_classification"]
+      },
+      "statistics": {
+        "last_profiled": "2024-08-01T00:00:00Z",
+        "distinct_count": 3,
+        "null_count": 0,
+        "null_percentage": 0.0,
+        "top_values": [
+          {"value": "B", "count": 450, "percentage": 0.45},
+          {"value": "A", "count": 350, "percentage": 0.35},
+          {"value": "C", "count": 200, "percentage": 0.20}
+        ]
+      },
+      "version": "1.0.0",
+      "tags": ["classification", "core", "required"]
+    }
+  ]
+}
